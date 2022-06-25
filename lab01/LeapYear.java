@@ -5,11 +5,13 @@
 public class LeapYear {
 
     /**
+     *
      * Update this comment to describe what this method does.
+     * @return 
      * @source CS 61BL Lab 1
      */
     public static boolean isLeapYear(int year) {
-        // TODO: Fill in this method.
+        return ((year%4 == 0&&year%100!=0 )|| year%400==0);
     }
 
     /** Calls isLeapYear to print correct statement. */
