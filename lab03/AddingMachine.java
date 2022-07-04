@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class AddingMachine {
+public class AddingMachine { //test
 
 	public static void main (String[] args) {
 

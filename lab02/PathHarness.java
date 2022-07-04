@@ -9,6 +9,7 @@ import java.awt.geom.GeneralPath;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+//test
 public class PathHarness extends JPanel implements Runnable {
 
     public static final int SIZE = 700;

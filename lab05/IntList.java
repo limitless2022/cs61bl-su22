@@ -3,7 +3,7 @@
  *
  * @author Maurice Lee and Wan Fung Chui
  */
-public class IntList {
+public class IntList { //test
 
     /** The integer stored by this node. */
     public int item;
