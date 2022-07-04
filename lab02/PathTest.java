@@ -4,9 +4,9 @@
 
 public class PathTest {
 
-    public static void testIterate() {
+    public static void testIterate() {  //测试迭代
         Path path = new Path(0, 0);
-        path.iterate(1, 1);
+        path.iterate(1, 1);   // .001?
         System.out.println(Math.abs(path.getCurrX()) < .001);
         System.out.println(Math.abs(path.getCurrY()) < .001);
         System.out.println(Math.abs(1 - path.getNextX()) < .001);

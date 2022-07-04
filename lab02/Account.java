@@ -3,25 +3,35 @@
  * amount in US dollars.
  */
 public class Account {
-
+    /**实例变量*/
     private int balance;
+    private Account parentAccount;
 
     /** Initialize an account with the given balance. */
     public Account(int balance) {
         this.balance = balance;
+        //Account parentAccount;
+        this.parentAccount = null;
     }
+    /**构造函数*/
+    public Account(int balance,Account parentAccount) {
+        this.balance =balance;
+        this.parentAccount = parentAccount;
+
+    }
+
 
     /** Returns the balance for the current account. */
     public int getBalance() {
-        return balance;
+        return this.balance;
     }
 
     /** Deposits amount into the current account. */
-    public void deposit(int amount) {
+    public void deposit(int amount) { //存储
         if (amount < 0) {
             System.out.println("Cannot deposit negative amount.");
         } else {
-            balance += amount;
+            this.balance += amount;
         }
     }
 
@@ -30,14 +40,22 @@ public class Account {
      * would leave a negative balance, print an error message and leave the
      * balance unchanged.
      */
-    public void withdraw(int amount) {
-        // TODO
+    public boolean withdraw(int amount) { //提取
         if (amount < 0) {
             System.out.println("Cannot withdraw negative amount.");
-        } else if (balance < amount) {
+            return false;
+        } else if (this.balance < amount) {
+            if (parentAccount!=null&& (parentAccount.balance+this.balance >= amount)) {
+                this.balance -= amount;
+                parentAccount.balance += this.balance;
+                this.balance =0;
+                return true;
+            }
             System.out.println("Insufficient funds");
+            return false;
         } else {
-            balance -= amount;
+            this.balance -= amount;
+            return true;
         }
     }
 
@@ -46,6 +64,13 @@ public class Account {
      * and depositing it into this account.
      */
     public void merge(Account other) {
-        // TODO
+        this.balance = this.balance + other.getBalance();
+        other.balance = 0;
+    }
+
+    public static void main(String[] args) {
+        Account zephyr = new Account(500);
+        Account max = new Account(100, zephyr);
+        max.withdraw(50);
     }
 }

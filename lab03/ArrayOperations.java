@@ -9,6 +9,11 @@ public class ArrayOperations {
             return;
         }
         // TODO: YOUR CODE HERE
+        for (;pos < values.length - 1;pos++) {
+            values[pos] = values[pos + 1]; //不要加个i来判断(不卷入for循环)，以防会改变values的初始值。
+            //pos ++ ;
+        }
+        values[pos] = 0;
     }
 
     /**
@@ -21,15 +26,38 @@ public class ArrayOperations {
             return;
         }
         // TODO: YOUR CODE HERE
+        int tep = pos;
+        pos = values.length - 1;
+        while (pos > tep){
+            values[pos] = values[pos - 1];
+            pos -- ;
+        }
+        values[tep] = newInt;
     }
 
-    /** 
+    /**
      * Returns a new array consisting of the elements of A followed by the
-     *  the elements of B. 
+     *  the elements of B.
      */
     public static int[] catenate(int[] A, int[] B) {
         // TODO: YOUR CODE HERE
-        return null;
+        int[] tep = new int[A.length + B.length];
+        int index = 0;
+        for (int i : A){
+            tep[index ++ ] = i;
+        }
+        for (int i : B){  //一个个抽取B的值 。
+            tep[index ++ ] = i;
+        }
+        return tep;
+        /**int [] tes = new int[A.length + B.length];
+        for (int i=0;i<A.length;i++) {
+            ArrayOperations.insert(tes,i,A[i]);
+            ArrayOperations.insert(tes,A.length-1,B[i]);
+        }
+        return tes; //A是 固定长度！！！
+         */
+
     }
 
 }

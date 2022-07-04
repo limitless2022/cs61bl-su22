@@ -3,7 +3,6 @@
  *
  * @author Maurice Lee and Wan Fung Chui
  */
-
 public class IntList {
 
     /** The integer stored by this node. */
@@ -49,8 +48,20 @@ public class IntList {
      * @return The element at [position]
      */
     public int get(int position) {
-        //TODO: YOUR CODE HERE
-        return -1;
+        int i=0;
+        IntList p = this; //指针；
+        if (position < 0) {
+            throw new IllegalArgumentException("IllegalArgumentException for negative indices");
+        }
+        while (i < position&&p.next!=null) {
+            p = p.next;
+            i++;
+        }
+        if (i < position) {
+            throw new IllegalArgumentException("IllegalArgumentException for negative indices");
+        } else {
+            return p.item;
+        }
     }
 
     /**
@@ -60,8 +71,16 @@ public class IntList {
      * @return The String representation of the list.
      */
     public String toString() {
-        //TODO: YOUR CODE HERE
-        return null;
+        IntList p = this;
+        String s = ""; //""表示空。
+        String k = " ";
+        for (;p!=null;p=p.next) {
+            s += Integer.toString(p.item); //将整数，转化成字符串。
+            if (p.next!=null) { //特殊情况。
+                s += k;
+            }
+        }
+        return s;
     }
 
     /**
@@ -82,10 +101,12 @@ public class IntList {
             return false;
         }
         IntList otherLst = (IntList) obj;
-
-        //TODO: YOUR CODE HERE
-
-        return false;
+        //比较长度是否一致和相应的值是否相等。
+        String str1 = this.toString(),str2 = otherLst.toString();
+        if (str1.equals(str2)) {
+            System.out.println(str1 + " " + str2);
+            return true;
+        } else return false;
     }
 
     /**
@@ -94,7 +115,11 @@ public class IntList {
      * @param value, the int to be added.
      */
     public void add(int value) {
-        //TODO: YOUR CODE HERE
+        IntList p = this;
+        while (p.next!=null) {
+            p = p.next;
+        }
+        p.next = new IntList(value);
     }
 
     /**
@@ -102,9 +127,14 @@ public class IntList {
      *
      * @return smallest element in the list
      */
-    public int smallest() {
-        //TODO: YOUR CODE HERE
-        return -1;
+    public int smallest() { //两两相比，最后得出最小值，并返回it。
+        IntList p = this;
+        int min = 0x3f3f3f3f; //无穷大！！！
+        while (p!=null) {
+            min = Math.min(min,p.item);
+            p = p.next;
+        }
+        return min;
     }
 
     /**
@@ -113,9 +143,30 @@ public class IntList {
      * @return The sum of squares of all elements.
      */
     public int squaredSum() {
-        //TODO: YOUR CODE HERE
-        return -1;
+        int powtotal = 0;
+        IntList p= this;
+        while (p!=null) {
+            powtotal += p.item * p.item;
+            p = p.next;
+        }
+        return powtotal;
     }
+
+    public static IntList squareListIterative(IntList L) {
+        if (L == null) {
+            return null;
+        }
+        IntList res = new IntList(L.item * L.item, null);
+        IntList ptr = res;
+        L = L.next;
+        while (L != null) {
+            ptr.next = new IntList(L.item * L.item, null);
+            L = L.next;
+            ptr = ptr.next;
+        }
+        return res;
+    }
+
 
     /**
      * Destructively squares each item of the list.
@@ -135,20 +186,6 @@ public class IntList {
      * @param L list to non-destructively square.
      * @return the squared list.
      */
-    public static IntList squareListIterative(IntList L) {
-        if (L == null) {
-            return null;
-        }
-        IntList res = new IntList(L.item * L.item, null);
-        IntList ptr = res;
-        L = L.next;
-        while (L != null) {
-            ptr.next = new IntList(L.item * L.item, null);
-            L = L.next;
-            ptr = ptr.next;
-        }
-        return res;
-    }
 
     /** Returns a list equal to L with all elements squared. Non-destructive.
      *
@@ -171,8 +208,12 @@ public class IntList {
      * @return new list with A followed by B.
      */
     public static IntList dcatenate(IntList A, IntList B) {
-        //TODO: YOUR CODE HERE
-        return null;
+        IntList i = A,j = B;
+            while (i.next!=null) {
+                i = i.next;
+            }
+            i.next = new IntList(j.item,j.next);
+        return A;  //magric???123——>123456 破坏版
     }
 
     /**
@@ -184,7 +225,30 @@ public class IntList {
      * @return new list with A followed by B.
      */
      public static IntList catenate(IntList A, IntList B) {
-        //TODO: YOUR CODE HERE
-        return null;
+         IntList copy_a = IntListCopy(A);
+         IntList copy_b = IntListCopy(B);
+         IntList ans = copy_a;
+
+         /**while (copy_a.next!=null) {
+             copy_a = copy_a.next;
+         }
+         copy_a.next = copy_b; //指针。
+         return ans;
+          */
+         if (copy_b==null) { //尾递归!
+             return ans;
+         } else if (copy_b!=null) {
+             ans.add(copy_b.item);
+         }
+         return catenate(copy_a,copy_b.next);
+
+
      }
+
+
+    public static IntList IntListCopy(IntList L){ //recursive;
+        if (L == null) return null;
+        return new IntList(L.item, IntListCopy(L.next));
+    }
+
 }

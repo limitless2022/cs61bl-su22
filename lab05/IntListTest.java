@@ -1,11 +1,9 @@
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Rule;
 
+import static org.junit.Assert.*;
 /** A suite of tests for IntList.
  @author Zephyr Barkan, Maurice Lee, Kevin Lin
  */
-
 public class IntListTest {
 
     /**
