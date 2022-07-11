@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Guo
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -14,6 +14,7 @@ public class Model extends Observable {
     private int _score;
     /** Maximum score so far.  Updated when game ends. */
     private int _maxScore;
+
     /** True iff game is ended. */
     private boolean _gameOver;
 
@@ -28,14 +29,20 @@ public class Model extends Observable {
     /** A new 2048 game on a board of size SIZE with no pieces
      *  and score 0. */
     public Model(int size) {
-        // TODO: Fill in this constructor.
+        //空的！
+        this._board = new Board(size);
+        this._score = 0;
+        this._maxScore = 0;
     }
 
     /** A new 2048 game where RAWVALUES contain the values of the tiles
      * (0 if null). VALUES is indexed by (row, col) with (0, 0) corresponding
      * to the bottom-left corner. Used for testing purposes. */
     public Model(int[][] rawValues, int score, int maxScore, boolean gameOver) {
-        // TODO: Fill in this constructor.
+        this._score = score;
+        this._maxScore = maxScore;
+        this._gameOver = gameOver;
+        this._board = new Board(rawValues, score);
     }
 
     /** Return the current Tile at (COL, ROW), where 0 <= ROW < size(),
@@ -79,7 +86,7 @@ public class Model extends Observable {
         _board.clear();
         setChanged();
     }
-
+    //两两合一。tile.value() Model类代表游戏的整个状态(所有棋盘Tile对象是什么，分数是多少。)
     /** Add TILE to the board. There must be no Tile currently at the
      *  same position. */
     public void addTile(Tile tile) {
@@ -88,6 +95,20 @@ public class Model extends Observable {
         setChanged();
     }
 
+
+    public boolean checkmove(Board b,int c,int r,int now) {
+        Tile t = b.tile(c,r),t_now =b.tile(c,now);
+        if (t == null) return true;
+        if (t.value()==t_now.value()) {
+            if (r - now != 1) {//上下相同则可移动。
+                for (int i = r - 1; i > now; i--) {//相隔的情况
+                    if (b.tile(c, i) != null) return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -103,8 +124,26 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
+        //test
+        Board b = _board;
+        b.setViewingPerspective(side);
+        for (int c=0;c<b.size();c++) {
+            for (int ori=b.size()-1;ori>=0;ori--) {//从小处移动到大处。
+                for (int now=ori-1;now>=0;now--) {
+                    Tile t_now = b.tile(c,now);
+                    if (t_now==null) continue;
+                    if (checkmove(b,c,ori,now)) {
+                        boolean temp = b.move(c,ori,t_now);
+                        changed = true;
+                        if (!temp) ori++;
+                        else _score += b.tile(c,ori).value();
+                        break;
+                    }
+                }
+            }
+        }
+        b.setViewingPerspective(Side.NORTH);
 
-        // TODO: Fill in this function.
 
         checkGameOver();
         if (changed) {
@@ -129,7 +168,14 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        for (int i=0;i < b.size();i++) {
+            for (int j=0;j < b.size();j++) {
+                Tile t = b.tile(i,j);
+                if (t == null) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -139,7 +185,14 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        for (int i=0;i < b.size();i++) {
+            for (int j=0;j < b.size();j++) {
+                Tile t = b.tile(i,j);
+                if (t != null&&t.value()==MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -150,7 +203,25 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        int[] dx = {0,-1,0,1};
+        int[] dy = {-1,0,1,0};
+        for (int i=0;i < b.size();i++) {
+            for (int j=0;j < b.size();j++) {
+                Tile t = b.tile(i,j);
+                if (t == null) {
+                    return true;
+                } else {//有两个相邻(四个方向)的瓦片具有相同的值。
+                    //四个方向和两值比较--how? dx、dy
+                    for (int k=0;k<4;k++) {
+                            int x = i+dx[k],y = j+dy[k];
+                            if (x>=0&&y< b.size()&&y>=0&&x<b.size()){
+                                Tile c = b.tile(x,y);
+                                if (c!=null&&t.value()==c.value()) return true;
+                            }
+                    }
+                }
+            }
+        }
         return false;
     }
 

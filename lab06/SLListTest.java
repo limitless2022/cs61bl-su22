@@ -1,3 +1,4 @@
+import jh61b.junit.In;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -7,7 +8,6 @@ public class SLListTest {
     public void testSLListAdd() {
         SLList test1 = SLList.of(1, 3, 5);
         SLList test2 = new SLList();
-
         test1.add(1, 2);
         test1.add(3, 4);
         assertEquals(5, test1.size());
@@ -22,5 +22,22 @@ public class SLListTest {
         assertEquals(10, test2.get(1));
         test1.add(0, 0);
         assertEquals(SLList.of(0, 1, 2, 3, 4, 5), test1);
+    }
+    @Test
+    public void testReverse() {
+        SLList test1 = SLList.of(1,2,3,4,5);
+        SLList test2 = new SLList(1);
+        SLList test3 = new SLList();
+        SLList test4 = new SLList().of(1,2);
+        test1.reverse();
+        test2.reverse();
+        test3.reverse();
+        test4.reverse();
+        assertEquals(SLList.of(5,4,3,2,1),test1);
+        //assertEquals("its should reverse",test1.equals(retest1));
+        assertEquals(SLList.of(1),test2);
+        assertEquals(SLList.of(),test3);
+        assertEquals(SLList.of(2,1),test4);
+
     }
 }
