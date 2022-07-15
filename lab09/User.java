@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Objects;
 
-public class User {
+public class User implements Comparable{
 
     private static int nextId = 1;
 
@@ -75,10 +75,22 @@ public class User {
         }
     }
 
-    public static void main(String[] args) {
+    @Override
+    public int compareTo(Object o) {
+        User other = (User) o;
+        if (id != other.id) {//越小，越靠前
+            return id - other.id;
+        }
+        else {
+            if (name.length() > other.name.length()) return 1;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {//实现comparable;
         User[] users = {
             new User(2, "Jedi", ""),
-            new User(4, "Zoe", ""),
+            new User(2, "Zoe", ""),
             new User(5, "Allyson", ""),
             new User(1, "Sohum", ""),
             new User(1, "Nandini", "")

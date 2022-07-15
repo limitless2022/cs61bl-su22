@@ -20,4 +20,20 @@ public class BooleanSetTest {
         assertTrue(aSet.isEmpty());
         assertEquals(0, aSet.size());
     }
+
+    @Test
+    public void toIntArray() {
+        BooleanSet t = new BooleanSet(100);
+        assertEquals(0,t.size());
+        for (int i = 0; i < 3; i ++) {
+            t.add(i);
+            assertTrue(t.contains(i));
+        }
+
+        int[] a = t.toIntArray();
+        assertTrue(a[0] == 1);
+        assertTrue(a[1] == 1);
+        //assertEquals(0,t.toIntArray()[23]);
+
+    }
 }
